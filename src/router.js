@@ -16,9 +16,12 @@ export default new Router({
     {
       path: '/about',
       name: 'about',
+      // component = () => import('./views/About.vue');
+
       // route level code-splitting
       // this generates a separate chunk (about.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
+      // 如果你想给拆分出的文件命名，可以尝试一下 webpack 提供的 Magic Comments（魔法注释）：
       component: () => import(/* webpackChunkName: "about" */ './views/About.vue')
     }
   ]
