@@ -38,7 +38,22 @@ module.exports = {
                 args[0][name] = merge(args[0][name], cfg);
                 return args
             })
+        
+
+        // 为路径设置别名
+        // key,value自行定义，比如.set('@@', resolve('src/components'))
+        // config.resolve.alias
+        //     .set('@', resolve('src'))
+        //     .set('_c', resolve('src/components'))
     },
+
+
+    // 如果你不需要使用eslint，把lintOnSave设为false即可
+    // lintOnSave: true,
+    // 设为false打包时不生成.map文件
+    // productionSourceMap: false
+
+
 
     // 除了上述使用 chainWebpack 来改变 webpack 内部配置外，我们还可以使用 configureWebpack 来进行修改，
     // 两者的不同点在于 chainWebpack 是链式修改，而 configureWebpack 更倾向于整体替换和修改。示例代码如下：

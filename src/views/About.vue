@@ -1,5 +1,49 @@
 <template>
   <div class="about">
-    <h1>This is an about page</h1>
+    <h1>tdis is an about page</h1>
+    <table>
+      <thead>
+        <tr>
+          <th>表头一</th>
+          <th>表头二</th>
+          <th>表头三</th>
+          <th>表头四</th>
+          <th>表头五</th>
+          <th>表头六</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>表头一</td>
+          <td>表头二</td>
+          <td>表头三</td>
+          <td>表头四</td>
+          <td>表头五</td>
+          <td rowspan="2">表头六</td>
+        </tr>
+        <tr>
+          <td>表头一</td>
+          <td>表头二</td>
+          <td>表头三</td>
+          <td>表头四</td>
+          <td>表头五</td>
+        </tr>
+        <tr>
+          <td>表头一</td>
+          <td>表头二</td>
+          <td>表头三</td>
+          <td>表头四</td>
+          <td>表头五</td>
+          <td rowspan="2">表头六</td>
+        </tr>
+        <tr>
+          <td>表头一</td>
+          <td>表头二</td>
+          <td>表头三</td>
+          <td>表头四</td>
+          <td>表头五</td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </template>

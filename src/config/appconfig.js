@@ -1,0 +1,24 @@
+export default {
+    testUrl:'http://prc33.858.im/dept/list',
+    testToken:'',
+    //网站根目录
+    baseUrl:'http://spzl.xwnykzs.com/gk/',
+    //网站首页
+    webIndex:'http://spzl.xwnykzs.com/#/',
+    //请求路径
+    serverUrl:'http://zljg.jscssui.cn/api/',
+    //图片根路径
+    imgUrl:'http://zljg.jscssui.cn/api/problem',
+    pageConfig:{
+        page:1,
+        pageSize:10,
+        maxSize:5,
+        total:0,
+        //可选的每页数据数目
+        pageSelect:[10,15,20]
+    },
+    //问题投诉
+    complainSave:'problem/saveProblemInfo',
+    //文件上传
+    fileUpload:'problem/uploadProfiles'
+}

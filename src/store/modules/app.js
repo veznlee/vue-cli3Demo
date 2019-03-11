@@ -1,4 +1,4 @@
-const moduleA = {
+export default {
     state: { 
         text: 'hello'
     },
@@ -21,5 +21,3 @@ const moduleA = {
         }
     }
 }
-
-export default moduleA
