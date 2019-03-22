@@ -1,29 +1,41 @@
-# vclitest
+# 项目文档
 
-## Project setup
+## 项目架构
+
+项目采用 vue + vue-router + vuex + axios 模式开发，ui 以 iview 框架为主
+
+
+## 项目结构
+
+1、所有的页面文件都在 src/views 目录下
+2、components 目录下为公共组件资源，多个页面公用
+3、libs 目录下为一些封装函数，可全局使用
+4、public/static 为网站静态资源
+
+
+## 前后端约定
+
+1、返回对象时
 ```
-npm install
+{
+    code:404, //错误状态码
+    msg:"错误信息", // 错误信息
+    data:{} // 内容
+}
 ```
 
-### Compiles and hot-reloads for development
+2、返回列表时
 ```
-npm run serve
-```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Run your tests
-```
-npm run test
+{
+    code: 404,
+    msg: "错误信息",
+    total: 50, // 总条数
+    data:[{}, {}, {}] // 没有内容时返回空数组
+}
 ```
 
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+3、状态码约定
+-1：未登录
+0：成功
+404: 接口未定义，前端接口写错的情况下返回
+其他状态码自行约定

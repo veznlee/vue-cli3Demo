@@ -1,4 +1,7 @@
-import Vue from 'vue'
-Vue.filter('checkPassState', function (value) {
-  return value*1==1?'合格':'不合格'
-})
+import { toMoney, dateFormat } from './common.js'
+
+const importFilter = Vue => {
+  Vue.filter('toMoney',toMoney);
+  Vue.filter('dateFormat',dateFormat);
+}
+export default importFilter

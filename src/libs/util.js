@@ -41,6 +41,22 @@ export default {
         };
         return true;
     },
+    computedFileSize:function (number) {
+        if(number < 1024) {
+          return number + 'bytes';
+        } else if(number >= 1024 && number < 1048576) {
+          return (number/1024).toFixed(1) + 'KB';
+        } else if(number >= 1048576) {
+          return (number/1048576).toFixed(1) + 'MB';
+        }
+    },
+    bytesToSize:function (bytes){
+        if (bytes === 0) return '0 B';
+        let k = 1024, // or 1000
+            sizes = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],
+            i = Math.floor(Math.log(bytes) / Math.log(k));
+        return (bytes / Math.pow(k, i)).toPrecision(3) + ' ' + sizes[i];
+    },
     dateFormat:function(date,fmt){
         var date = new Date(date);
         var o = {
