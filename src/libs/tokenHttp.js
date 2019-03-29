@@ -2,9 +2,9 @@ import axios from 'axios'
 import {Message} from 'iview';
 // import qs from 'qs'
 import local from './local'
-import webConfig from '../config'
+import {urlConfig} from '@/config/index'
 
-import router from '../router'
+import router from '@/router/index'
 
 
 /**
@@ -13,17 +13,18 @@ import router from '../router'
  */
 const toLogin = () => {
     alert('登录过期');
-    // router.replace({
-    //     path: '/login',
-    //     query: {
-    //         redirect: router.currentRoute.fullPath
-    //     }
-    // });
+    return;
+    router.replace({
+        path: '/login',
+        query: {
+            redirect: router.currentRoute.fullPath
+        }
+    });
 }
 
 //当创建一个实例时进行默认设置
 let tokenInstance = axios.create({
-    baseURL:webConfig.serverUrl
+    baseURL:urlConfig.serverUrl
 });
 tokenInstance.interceptors.request.use(function(config){
     // 添加token
@@ -51,7 +52,6 @@ tokenInstance.interceptors.request.use(function(config){
 
 // 对响应数据做点什么
 tokenInstance.interceptors.response.use(function (response) {
-    console.log(response.data);
     if(response.data.code*1 == -1){
         toLogin();
         return;
@@ -68,7 +68,7 @@ tokenInstance.interceptors.response.use(function (response) {
  * 提交表单数据
  * */
 let tokenFormInstance = axios.create({
-    baseURL:webConfig.serverUrl,
+    baseURL:urlConfig.serverUrl,
     headers:{
         'Content-Type': 'application/x-www-form-urlencoded'
     },

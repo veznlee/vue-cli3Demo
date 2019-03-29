@@ -1,10 +1,10 @@
 import Vue from 'vue'
 import App from './App.vue'
-import router from './router'
-import store from './store'
+import router from '@/router/index.js'
+import store from '@/store/index.js'
 import './registerServiceWorker'
 
-import urlConfig from './config'
+import {urlConfig} from './config'
 import axios from 'axios'
 import {tokenInstance, tokenFormInstance, downloadFile} from '@/libs/tokenHttp.js'
 import storage from '@/libs/local.js'

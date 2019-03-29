@@ -35,7 +35,7 @@
             <tr>
               <td class="bg-gray">曾用名</td>
               <td>{{personInfoObj.usedName}}</td>
-              <td class="bg-gray">名族</td>
+              <td class="bg-gray">民族</td>
               <td>{{personInfoObj.nationText}}</td>
               <td class="bg-gray">身份证号</td>
               <td>{{personInfoObj.idNum}}</td>
@@ -148,7 +148,7 @@
   import attachProveFile from '@/components/attach-prove-file.vue'
   import {dateFormat} from '@/filter/common'
   import urls from "@/config/lzarchives.url.js"
-  import webConfig from "@/config/index.js"
+  import {urlConfig} from "@/config/index.js"
   const jdperson = urls.jdperson;
   export default {
     components:{
@@ -168,7 +168,7 @@
     },
     data(){
       return {
-        importFileUrls:webConfig.serverUrl+webConfig.fileUpload,
+        importFileUrls:urlConfig.serverUrl+urlConfig.fileUpload,
         personId:0,
         personInfoObj:{
           id: '',
@@ -222,29 +222,30 @@
             title: '担任职务',
             key: 'workPost',
             align: 'center'
-          },{
-            title: '操作',
-            align: 'center',
-            width: 100,
-            render: (h, params) => {
-              if(params.row.id != 0){
-                return h('Button', {
-                  props: {
-                    type: 'error',
-                    size: 'small'
-                  },
-                  style: {
-                    marginRight: '5px'
-                  },
-                  on: {
-                    click: () => {
-                      this.removeListItem(params.row.id,jdperson.workExperience)
-                    }
-                  }
-                }, '删除')
-              }
-            }
           }
+          // ,{
+          //   title: '操作',
+          //   align: 'center',
+          //   width: 100,
+          //   render: (h, params) => {
+          //     if(params.row.id != 0){
+          //       return h('Button', {
+          //         props: {
+          //           type: 'error',
+          //           size: 'small'
+          //         },
+          //         style: {
+          //           marginRight: '5px'
+          //         },
+          //         on: {
+          //           click: () => {
+          //             this.removeListItem(params.row.id,jdperson.workExperience)
+          //           }
+          //         }
+          //       }, '删除')
+          //     }
+          //   }
+          // }
         ],
         workList:[],
 
@@ -279,26 +280,27 @@
             title: '职务',
             key: 'workPost',
             align: 'center'
-          },{
-            title: '操作',
-            align: 'center',
-            width: 100,
-            render: (h, params) => {
-              if(params.row.id != 0){
-                return h('Button', {
-                  props: {
-                    type: 'error',
-                    size: 'small'
-                  },
-                  on: {
-                    click: () => {
-                      this.removeListItem(params.row.id,jdperson.familyMember,'workList',params.row.index)
-                    }
-                  }
-                }, '删除')
-              }
-            }
           }
+          // ,{
+          //   title: '操作',
+          //   align: 'center',
+          //   width: 100,
+          //   render: (h, params) => {
+          //     if(params.row.id != 0){
+          //       return h('Button', {
+          //         props: {
+          //           type: 'error',
+          //           size: 'small'
+          //         },
+          //         on: {
+          //           click: () => {
+          //             this.removeListItem(params.row.id,jdperson.familyMember,'workList',params.row.index)
+          //           }
+          //         }
+          //       }, '删除')
+          //     }
+          //   }
+          // }
         ],
         familyList:[],
 

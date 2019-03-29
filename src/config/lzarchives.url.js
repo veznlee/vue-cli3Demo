@@ -60,6 +60,13 @@ export default {
   },
   glperson:{
     list:'bs/personalMgrInfos'
+    ,import:'bs/personalMgrInfo/importBasicInfo'
     ,add:'bs/personalMgrInfo'
+    ,delete:'bs/personalMgrInfos/'
+    ,detail:'bs/personalMgrInfo/'
+    ,userList:'sys/users/select'
+  },
+  operatelog:{
+    list:'sys/operationLogs'
   }
 }

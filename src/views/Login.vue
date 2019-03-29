@@ -20,14 +20,14 @@
 </template>
 <script>
 import LoginForm from '@/components/login-form'
-import webConfig from '@/config/index.js'
+import {urlConfig} from '@/config/index.js'
+import { mapActions } from 'vuex'
 export default {
   components:{
     LoginForm
   },
   data() {
     return {
-      token:'',
       title: '登录页面',
       loginErr: false,
       loginErrMsg: '',
@@ -39,6 +39,11 @@ export default {
     // this.$downFile('file_attachment_prove\\20190320\\测试.zip')
   },
   methods:{
+    ...mapActions([
+      'setUser',
+      'setPermission',
+      'setToken'
+    ]),
     handleSubmit (obj) {
       var time = (new Date()).getTime();
       if(time - this.loginTime  < 2000 ) return;
@@ -49,15 +54,17 @@ export default {
         password:obj.password
       };
       this.$thttp({
-        url:webConfig.serverUrl+webConfig.login,
+        url:urlConfig.serverUrl+urlConfig.login,
         method:'post',
         data:loginData
       })
       .then(data=>{
         if(data.code *1 == 0){
-          this.loginState = '已登录';
           this.$storage.setLocal('accessToken',data.token);
-          this.token = data.token;
+          this.$storage.setLocalObj('_app_user',data.operator);
+          this.$storage.setLocalObj('_app_permission',data.data);
+          // 测试vuex
+          this.setToken(data.token);
           if(obj.rememberme){
             this.$storage.setLocalObj('_login_user',{
               u:obj.account,

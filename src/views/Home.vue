@@ -2,99 +2,48 @@
   <div class="home">
     <div class="home-top"></div>
     <div class="home-nav-container">
-       <div class="home-nav-card">
-         <div class="card-title">
-           <i class="home-nav-icon icon-yw"></i><span>业务</span>
-         </div>
-         <div class="card-body">
-           <ul class="home-nav-list clearfix">
-             <li class="nav-item">
-               <router-link :to="{name:'jd-person'}" class="router-xfjb">
-                 <span>信访举报</span>
-               </router-link>
-             </li>
-             <li class="nav-item">
-               <router-link :to="{name:'jd-person'}" class="router-jdgl">
-                 <span>监督管理</span>
-               </router-link>
-             </li>
-             <li class="nav-item">
-               <router-link :to="{name:'jd-person'}" class="router-zjsc">
-                 <span>执纪审查</span>
-               </router-link>
-             </li>
-             <li class="nav-item">
-               <router-link :to="{name:'jd-person'}" class="router-slzj">
-                 <span>审理执纪</span>
-               </router-link>
-             </li>
-             <li class="nav-item">
-               <router-link :to="{name:'jd-person'}" class="router-xsxc">
-                 <span>巡视巡查</span>
-               </router-link>
-             </li>
-             <li class="nav-item">
-               <router-link :to="{name:'jd-person'}" class="router-lzda">
-                 <span>廉政档案</span>
-               </router-link>
-             </li>
-             <li class="nav-item">
-               <router-link :to="{name:'jd-person'}" class="router-bgzd">
-                 <span>请示报告制度</span>
-               </router-link>
-             </li>
-             <li class="nav-item">
-               <router-link :to="{name:'jd-person'}" class="router-bbba">
-                 <span>报备备案</span>
-               </router-link>
-             </li>
-              <li class="nav-item">
-               <router-link :to="{name:'jd-person'}" class="router-lzyt">
-                 <span>廉政约谈</span>
-               </router-link>
-             </li>
-             <li class="nav-item">
-               <router-link :to="{name:'jd-person'}" class="router-lzfx">
-                 <span>廉政风险防控</span>
-               </router-link>
-             </li>
-             <li class="nav-item">
-               <router-link :to="{name:'jd-person'}" class="router-jcgz">
-                 <span>基础工作</span>
-               </router-link>
-             </li>
-           </ul>
-         </div>
-       </div>
-       <div class="home-nav-card">
-         <div class="card-title">
-           <i class="home-nav-icon icon-set"></i><span>设置</span>
-         </div>
-         <div class="card-body">
-           <ul class="home-nav-list clearfix">
-             <li class="nav-item">
-               <router-link :to="{name:'jd-person'}" class="router-ypsz">
-                 <span>研判设置</span>
-               </router-link>
-             </li>
-             <li class="nav-item">
-               <router-link :to="{name:'jd-person'}" class="router-xtsz">
-                 <span>系统设置</span>
-               </router-link>
-             </li>
-           </ul>
+      <div class="home-nav-card" v-for="modalItem in menu" :key="modalItem.id">
+        <div class="card-title">
+          <i class="home-nav-icon" :class="modalItem.mata.icon"></i><span>{{modalItem.mata.title}}</span>
+        </div>
+        <div class="card-body">
+          <ul class="home-nav-list clearfix">
+            <li class="nav-item" v-for="item in modalItem.children" :key="item.id">
+              <a href="javascript:;" :class="item.mata.icon" @click="toChild(item)">
+                <span>{{item.mata.title}}</span>
+              </a>
+            </li>
+          </ul>
          </div>
        </div>
     </div>
-    <div class=""></div>
   </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 export default {
   data(){
     return{
-
+      menu:[]
+    }
+  },
+  created(){
+    this.getMenu();
+    console.log(this.menu);
+  },
+  methods:{
+    ...mapGetters([
+      'getToken'
+    ]),
+    getMenu(){
+      this.menu = this.$storage.getLocalObj('_app_permission');
+    },
+    toChild(item){
+      if(item.children && item.children[0]){
+        let first = item.children[0];
+        this.$router.push({name:first.name});
+      }
     }
   }
 }

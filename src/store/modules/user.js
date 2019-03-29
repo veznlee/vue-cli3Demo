@@ -1,25 +1,45 @@
 const user = {
-    state: { 
-        text: 'hello'
-    },
-    mutations: {
-        addText (state, txt) {
-            // 这里的 `state` 对象是模块的局部状态
-            state.text += txt
-        }
-    },
-    
-    actions: {
-        setText ({ commit }) {
-            commit('addText', ' world')
-        }
-    },
+  state: {
+    user:{},
+    permission:{},
+    token:''
+  },
 
-    getters: {
-        getText (state) {
-            return state.text + '!'
-        }
+  mutations: {
+    addUser (state, user) {
+      state.user = user
+    },
+    addPermission (state, permission) {
+      state.permission = permission
+    },
+    addToken (state, token) {
+      state.token = token
     }
+  },
+  
+  actions: {
+    setUser (context,payload) {
+      context.commit('addUser', payload)
+    },
+    setPermission (context,payload) {
+      context.commit('addPermission', payload)
+    },
+    setToken (context,payload) {
+      context.commit('addToken', payload)
+    },
+  },
+
+  getters: {
+    getUser (state) {
+      return state.user
+    },
+    getPermission (state) {
+      return state.user
+    },
+    getToken (state) {
+      return state.token
+    }
+  }
 }
 
 export default user

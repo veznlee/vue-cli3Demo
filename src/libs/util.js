@@ -1,6 +1,6 @@
 export default {
     trim:function(str){
-　　    return str.replace(/(^\s*)|(\s*$)/g, "");
+　　    return (str+'').replace(/(^\s*)|(\s*$)/g, "");
 　　},
     /*去除字符串左边空格*/
 　　ltrim:function(str){
@@ -21,10 +21,13 @@ export default {
     },
     isCnName:function(str){
         //return /^([\u4e00-\u9fa5]+(·{0,1})){0,4}[\u4e00-\u9fa5]$/.test(str);
-        return /^[\u4e00-\u9fa5]{2,4}$/.test(str);
+        return /^[\u4E00-\u9FA5\u9FA6-\u9FBB]{2,6}$/.test(str);
     },
     isEmail:function(str){
-        return /^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z0-9]{2,6}$/.test(str);
+        return /^[a-zA-Z0-9_.\-]+@[a-zA-Z0-9_\-]+(\.[a-zA-Z0-9_\-]+)*\.[a-zA-Z0-9]{2,6}$/.test(str);
+    },
+    isAccount:function(str){
+        return /^[a-zA-Z][a-zA-Z0-9_\-]{2,}$/.test(str);
     },
     /*判断值是否为空*/
     isEmpty:function(val){

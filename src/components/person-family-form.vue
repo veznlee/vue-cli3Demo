@@ -81,7 +81,7 @@
     methods: {
       getPoliticalSelect(){
         this.$thttp({
-          url:this.$urlConfig.dataList+'14',
+          url:this.$urlConfig.dataList+this.$urlConfig.dataListType.politicalAspect,
           method:'get'
         }).then(data=>{
           if(Array.isArray(data) && data.length>0){

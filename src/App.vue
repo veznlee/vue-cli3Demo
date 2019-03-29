@@ -18,4 +18,12 @@
 .ivu-table-border .ivu-table-tip td{
   border-right:0;
 }
+
+.ivu-modal-body .ivu-form-item:last-child{
+  margin-bottom:6px;
+}
+
+.table-default td .ivu-picker-panel-body{
+  font-size:12px;
+}
 </style>

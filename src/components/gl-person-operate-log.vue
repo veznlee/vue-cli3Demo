@@ -1,11 +1,7 @@
 <template>
-  <div class="fh-full-scroll">
-    <div class="table-page-wrap">
-      <div class="search-line clearfix">
-        <div class="search-inline-item">
-          <span class="item-label">操作人</span>
-          <Input v-model="searchform.username" class="commom-input" placeholder="姓名"/>
-        </div>
+  <div class="detail-tab-container">
+    <div class="table-page-wrap" style="width:100%;padding:0;">
+      <div class="search-line clearfix" style="padding-top:0;">
         <div class="search-inline-item">
           <span class="item-label">操作类型</span>
           <Input v-model="searchform.operation" class="commom-input" placeholder="新增/修改等操作类型"/>
@@ -29,15 +25,20 @@
     </div>
   </div>
 </template>
-
 <script>
-import {dateFormat} from '@/filter/common'
-import urls from "@/config/lzarchives.url.js"
+import urls from '@/config/lzarchives.url.js'
 export default {
-  name:'operatelog',
+  props:{
+    entityId:{
+      type:[String,Number],
+      required:true
+    }
+  },
   data(){
     return {
-      urls:urls.operatelog,
+      urls:urls.glperson,
+      currentId:'',
+      currentUserName:'',
       searchform:{
         username:'',
         operation:'',
@@ -72,7 +73,7 @@ export default {
           align: 'center'
         }
       ],
-      dataList: [],
+      dataList:[],
       dataTotal:0,
       page:{
         page:1,
@@ -80,13 +81,35 @@ export default {
       }
     }
   },
-  created(){
-    this.getList();
+  watch:{
+    entityId:{
+      handler(newValue,oldValue){
+        if(newValue && newValue*1 !=0){
+          this.currentId = newValue;
+          this.getDetail(()=>this.getList());
+        }
+      },
+      immediate:true
+    }
   },
   methods:{
+    getDetail(callBack){
+      this.$thttp({
+        url:this.urls.detail+this.currentId,
+        method:'get'
+      }).then(data=>{
+        if(data.code*1 == 0){
+          this.currentUserName = data.data.loginAccount;
+          callBack && callBack();
+        }else{
+          this.$Message.warning(data.msg);
+        }
+      })
+    },
     getList(){
       let _this = this;
       var searchData = Object.assign({},this.searchform,this.page);
+      searchData.username = this.accountName;
       if(searchData.beginTime && searchData.endTime && searchData.beginTime>searchData.endTime){
         this.$Message.warning('搜索开始时间不能大于结束时间');
         return;
@@ -97,9 +120,8 @@ export default {
       if(searchData.endTime != ''){
         searchData.endTime = dateFormat(searchData.endTime);
       }
-      console.log(searchData);
       this.$thttp({
-        url:this.urls.list,
+        url:urls.operatelog.list,
         data:searchData,
         method:'post'
       }).then(data=>{
@@ -122,16 +144,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss">
-  .table-graduation-td{
-    padding:10px 0;
-  }
-  .table-graduation-td>div{
-    line-height:16px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    word-break: break-all;
-  }
-</style>

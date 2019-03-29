@@ -1,10 +1,10 @@
 <template>
   <div class="fh-full-scroll">
-    <div class="table-page-wrap fh-full-scroll f-pr">
+    <div class="table-page-wrap f-pr">
       <div class="search-line clearfix">
         <div class="search-inline-item">
           <span class="item-label">关键字</span>
-          <Input v-model="searchform.searchKey" class="commom-input" placeholder="姓名、编号"/>
+          <Input v-model="searchform.searchKey" class="commom-input" placeholder="姓名/编号"/>
         </div>
         <div class="search-inline-item">
           <span class="item-label">职务</span>
@@ -21,7 +21,7 @@
       <div class="operate-line">
         <Button type="success" size="large" @click="addNew">新增</Button>
         <Button type="error" size="large" :disabled="btnDisabled" @click="updateDetail">修改</Button>
-        <Button type="warning" size="large" :disabled="btnDisabled" @click="transfer">调任</Button>
+        <Button type="warning" size="large" :disabled="btnDisabled" @click="transfer">变更</Button>
         <Button type="info" size="large" :disabled="btnDisabled" @click="viewDetail">查看</Button>
         <Button type="primary" size="large" :disabled="btnDisabled" style="width:160px;padding-left:5px;padding-right:5px;">廉洁证明材料</Button>
       </div>
@@ -32,20 +32,34 @@
         <Page :total="dataTotal" show-total :current="page.page" :page-size="page.pageSize" @on-change="pageChange"/>
       </div>
     </div>
+
+    <Modal
+      v-model="transferModal"
+      title="变更个人状态"
+      :closable="false"
+      :mask-closable="false"
+      >
+      <div class=""></div>
+      <div slot="footer" style="text-align:left;">
+        <Button type="primary" size="large" @click="confirmTransfer">确定</Button>
+        <Button type="error" size="large" @click="cancelTransfer">取消</Button>
+      </div>
+    </Modal>
   </div>
 </template>
 
 <script>
 import '@/assets/jd-person-detail.scss'
 import {dateFormat} from '@/filter/common'
+import curdMixin from '@/mixins/curd.js'
 import urls from "@/config/lzarchives.url.js"
-const jdperson = urls.jdperson;
 
 export default {
+  mixins:[curdMixin],
   data(){
     return {
       openEdit:false,
-      personId:'',
+      urls:urls.jdperson,
       searchform:{
         searchKey:'',
         workPost:'',
@@ -160,17 +174,11 @@ export default {
           }
         }
       ],
-      btnDisabled: true,
-      dataList: [],
-      dataTotal:0,
-      page:{
-        page:1,
-        pageSize:10
-      }
+      transferModal:false,
+      transferStateList:[],
     }
   },
   created(){
-    this.getList();
     this.getJobSelect();
   },
   mounted(){
@@ -184,13 +192,14 @@ export default {
         searchData.workDate = dateFormat(searchData.workDate);
       }
       this.$thttp({
-        url:jdperson.list,
+        url:this.urls.list,
         data:searchData,
         method:'post'
       }).then(data=>{
         if(data.code*1 == 0){
           this.dataList = data.data;
           this.dataTotal = data.total;
+          this.currentRow = {id:''};
         }else{
           this.$Message.warning(data.msg);
         }
@@ -198,7 +207,7 @@ export default {
     },
     getJobSelect(){
       this.$thttp({
-        url:this.$urlConfig.dataList+'9',
+        url:this.$urlConfig.dataList+this.$urlConfig.dataListType.workPost,
         method:'get'
       }).then(data=>{
         if(Array.isArray(data) && data.length>0){
@@ -210,28 +219,11 @@ export default {
         }
       })
     },
-    search(){
-      this.page.page = 1;
-      this.getList();
-    },
-    // 切换分页
-    pageChange(index){
-      this.page.page = index;
-      this.getList();
-    },
-    // 切换表格选中行
-    tableRowChange(currentRow, oldCurrentRow){
-      this.currentRow = currentRow;
-      this.btnDisabled = false;
-    },
     addNew(){
       this.$router.push({
         name:'jd-person-detail',
         params:{id:0,view:0}
       })
-    },
-    transfer(){
-      console.log('调任')
     },
     viewDetail(){
       this.$router.push({
@@ -244,6 +236,15 @@ export default {
         name:'jd-person-detail',
         params:{id:this.currentRow.id,view:0}
       })
+    },
+    transfer(){
+      this.transferModal = true;
+    },
+    confirmTransfer(){
+
+    },
+    cancelTransfer(){
+      this.transferModal = false;
     }
   }
 }

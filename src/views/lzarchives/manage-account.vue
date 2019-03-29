@@ -1,31 +1,33 @@
 <template>
-  <div class="table-page-wrap">
-    <div class="search-line clearfix">
-      <div class="search-inline-item">
-        <span class="item-label">关键字</span>
-        <Input v-model="searchform.searchKey" class="commom-input" placeholder="姓名、编号"/>
+  <div class="fh-full-scroll">
+    <div class="table-page-wrap">
+      <div class="search-line clearfix">
+        <div class="search-inline-item">
+          <span class="item-label">关键字</span>
+          <Input v-model="searchform.searchKey" class="commom-input" placeholder="姓名、编号"/>
+        </div>
+        <div class="search-inline-item">
+          <span class="item-label">职务</span>
+          <Select v-model="searchform.workPost" class="commom-input">
+            <Option v-for="item in jobList" :value="item.dictValue" :key="item.dictValue">{{ item.dictName }}</Option>
+          </Select>
+        </div>
+        <div class="search-inline-item">
+          <span class="item-label">参工时间</span>
+          <DatePicker type="date" placement="bottom-end" v-model="searchform.workDate" placeholder="选择日期" :clearable="true" class="commom-input"></DatePicker>
+        </div>
+        <Button type="primary" class="search-btn" @click="search">搜索</Button>
       </div>
-      <div class="search-inline-item">
-        <span class="item-label">职务</span>
-        <Select v-model="searchform.workPost" class="commom-input">
-          <Option v-for="item in jobList" :value="item.dictValue" :key="item.dictValue">{{ item.dictName }}</Option>
-        </Select>
+      <div class="operate-line">
+        <Button type="success" size="large">新增</Button>
+        <Button type="info" size="large">查询</Button>
       </div>
-      <div class="search-inline-item">
-        <span class="item-label">参工时间</span>
-        <DatePicker type="date" placement="bottom-end" v-model="searchform.workDate" placeholder="选择日期" :clearable="true" class="commom-input"></DatePicker>
+      <div class="table-container bold-table-header">
+        <Table stripe border :columns="columns1" :data="dataList"></Table>
       </div>
-      <Button type="primary" class="search-btn" @click="search">搜索</Button>
-    </div>
-    <div class="operate-line">
-      <Button type="success" size="large">新增</Button>
-      <Button type="info" size="large">查询</Button>
-    </div>
-    <div class="table-container bold-table-header">
-      <Table stripe border :columns="columns1" :data="dataList"></Table>
-    </div>
-    <div class="pagination-container" v-show="dataTotal > page.pageSize">
-      <Page :total="dataTotal" show-total :current="page.page" :page-size="page.pageSize" @on-change="pageChange"/>
+      <div class="pagination-container" v-show="dataTotal > page.pageSize">
+        <Page :total="dataTotal" show-total :current="page.page" :page-size="page.pageSize" @on-change="pageChange"/>
+      </div>
     </div>
   </div>
 </template>

@@ -4,7 +4,7 @@ import personInfoView from '@/components/person-info-view.vue'
 import attachProveFile from '@/components/attach-prove-file.vue'
 
 import urls from "@/config/lzarchives.url.js"
-import webConfig from "@/config/index.js"
+import {urlConfig} from "@/config/index.js"
 export default {
   components:{
     viewProveFile,
@@ -24,7 +24,7 @@ export default {
   },
   data(){
     return {
-      webConfig,
+      urlConfig,
       urls,
       personId:0,
       hackReset:true,
