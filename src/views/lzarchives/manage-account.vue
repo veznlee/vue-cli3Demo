@@ -4,19 +4,19 @@
       <div class="search-line clearfix">
         <div class="search-inline-item">
           <span class="item-label">关键字</span>
-          <Input v-model="searchform.searchKey" class="commom-input" placeholder="姓名、编号"/>
+          <Input v-model="searchform.searchKey" class="commom-input" size="large" placeholder="姓名、编号"/>
         </div>
         <div class="search-inline-item">
           <span class="item-label">职务</span>
-          <Select v-model="searchform.workPost" class="commom-input">
+          <Select v-model="searchform.workPost" class="commom-input" size="large">
             <Option v-for="item in jobList" :value="item.dictValue" :key="item.dictValue">{{ item.dictName }}</Option>
           </Select>
         </div>
         <div class="search-inline-item">
           <span class="item-label">参工时间</span>
-          <DatePicker type="date" placement="bottom-end" v-model="searchform.workDate" placeholder="选择日期" :clearable="true" class="commom-input"></DatePicker>
+          <DatePicker type="date" size="large" placement="bottom-end" v-model="searchform.workDate" placeholder="选择日期" :clearable="true" class="commom-input"></DatePicker>
         </div>
-        <Button type="primary" class="search-btn" @click="search">搜索</Button>
+        <Button type="primary" class="search-btn" size="large" @click="search">搜索</Button>
       </div>
       <div class="operate-line">
         <Button type="success" size="large">新增</Button>
@@ -26,7 +26,15 @@
         <Table stripe border :columns="columns1" :data="dataList"></Table>
       </div>
       <div class="pagination-container" v-show="dataTotal > page.pageSize">
-        <Page :total="dataTotal" show-total :current="page.page" :page-size="page.pageSize" @on-change="pageChange"/>
+        <Page 
+        show-total  
+        show-elevator 
+        show-sizer
+        :total="dataTotal" 
+        :current="page.page" 
+        :page-size="page.pageSize" 
+        @on-change="pageChange"
+        @on-page-size-change="pageSizeChange"/>
       </div>
     </div>
   </div>
@@ -34,13 +42,13 @@
 
 <script>
 import {dateFormat} from '@/filter/common'
+import curdMixin from '@/mixins/curd.js'
 import urls from "@/config/lzarchives.url.js"
-const jdperson = urls.jdperson;
-
 export default {
-  name:'jd-person',
+  mixins:[curdMixin],
   data(){
     return {
+      urls:urls.jdperson,
       searchform:{
         searchKey:'',
         workPost:'',
@@ -135,18 +143,10 @@ export default {
             )
           }
         }
-      ],
-      dataList: [
-      ],
-      dataTotal:0,
-      page:{
-        page:1,
-        pageSize:10
-      }
+      ]
     }
   },
   created(){
-    this.getList();
     this.getJobSelect();
   },
   methods:{
@@ -157,7 +157,7 @@ export default {
         searchData.workDate = dateFormat(searchData.workDate);
       }
       this.$thttp({
-        url:jdperson.list,
+        url:this.urls.list,
         data:searchData,
         method:'post'
       }).then(data=>{
@@ -183,14 +183,6 @@ export default {
           _this.jobList = data;
         }
       })
-    },
-    search(){
-      this.page.page = 1;
-      this.getList();
-    },
-    pageChange(index){
-      this.page.page = index;
-      this.getList();
     }
   }
 }

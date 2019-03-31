@@ -54,6 +54,11 @@ export default {
       this.page.page = index;
       this.getList();
     },
+    // 切换分页大小
+    pageSizeChange(size){
+      this.page.pageSize = size;
+      this.getList();
+    },
     // 切换表格选中行
     tableRowChange(currentRow, oldCurrentRow){
       this.currentRow = currentRow;

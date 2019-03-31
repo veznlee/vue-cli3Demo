@@ -13,9 +13,9 @@
               <div class="search-line clearfix">
                 <div class="search-inline-item">
                   <span class="item-label">关键字</span>
-                  <Input v-model="searchform.searchKey" class="commom-input" placeholder="部门名称"/>
+                  <Input v-model="searchform.searchKey" class="commom-input" size="large" placeholder="部门名称"/>
                 </div>
-                <Button type="primary" class="search-btn" @click="search">搜索</Button>
+                <Button type="primary" class="search-btn" @click="search" size="large">搜索</Button>
               </div>
               <div class="operate-line">
                 <Button type="success" size="large" @click="add">新增</Button>
@@ -29,7 +29,15 @@
                 <Table highlight-row stripe :columns="columns" :data="dataList" ref="tableWrap" @on-current-change="tableRowChange"></Table>
               </div>
               <div class="pagination-container" v-show="dataTotal > page.pageSize">
-                <Page :total="dataTotal" show-total :current="page.page" :page-size="page.pageSize" @on-change="pageChange"/>
+                <Page 
+                  show-total  
+                  show-elevator 
+                  show-sizer
+                  :total="dataTotal" 
+                  :current="page.page" 
+                  :page-size="page.pageSize" 
+                  @on-change="pageChange"
+                  @on-page-size-change="pageSizeChange"/>
               </div>
             </div>
           </div>
@@ -58,12 +66,12 @@
       :closable="false"
       :mask-closable="false"
       title="配置角色权限">
-      <tree-form ref="treeDialog" 
+      <like-permission-form ref="treeDialog" 
       :url="urls.permissionDetail"
       :action-id="activeId"
       :multiple="true"
       @submitTree="submitTreeForm"
-      ></tree-form>
+      ></like-permission-form>
       <div slot="footer" style="text-align:left;">
         <div v-show="!isTreeView">
           <Button type="primary" size="large" @click="confirmTreeForm">确定</Button>
@@ -78,17 +86,18 @@
 </template>
 
 <script>
-import treeMixin from '@/mixins/tree-modul.js'                                                                                                                                                                                                                                                                                                                                     
+import treeMixin from '@/mixins/tree-modul.js'
 import roleForm from './role-form.vue'
 import treeDialogMixin from '@/mixins/tree-dialog.js'
-import treeForm from './tree-form.vue'
+// import treeForm from './tree-form.vue'
+import likePermissionForm from '@/components/like-permission-form.vue'
 import urls from "@/config/system.url.js"
 
 export default {
   mixins:[treeMixin,treeDialogMixin],
   components:{
     roleForm,
-    treeForm
+    likePermissionForm
   },
   data(){
     return {
@@ -205,6 +214,9 @@ export default {
           this.$Message.warning('保存失败');
         }
       })
+    },
+    confirmTreeForm(){
+      this.$refs.treeDialog.handleSubmitCAINodes();
     },
     submitTreeForm(obj){
       // 保留isRole为true的节点，并返回id数组

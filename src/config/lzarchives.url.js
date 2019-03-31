@@ -8,6 +8,7 @@ export default {
     list:'bs/personalInfos'
     ,add:'bs/personalMgrInfo'
     ,detail:'bs/personalInfo/'
+    ,changeJobState:'bs/personalInfo/'
     ,importBaseInfo:'bs/personalInfo/importBasicInfo'
     ,workExperience:'bs/postExperience'
     ,deleteWorkExperience:'bs/postExperiences/'
@@ -64,6 +65,7 @@ export default {
     ,add:'bs/personalMgrInfo'
     ,delete:'bs/personalMgrInfos/'
     ,detail:'bs/personalMgrInfo/'
+    ,changeJobState:'bs/personalMgrInfo/'
     ,userList:'sys/users/select'
   },
   operatelog:{

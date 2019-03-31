@@ -363,3 +363,20 @@
     }
   }
 }
+
+/*选择列表*/
+.select-liest-wrap{
+  border: 1px solid #e8eaec;
+  .select-list-item{
+    padding: 5px;
+    font-size: 14px;
+    line-height: 20px;
+    cursor: pointer;
+    &:hover{
+      background: #f9f9f9;
+    }
+    &.active,&.active:hover{
+      background: #e8eaec;
+    }
+  }
+}

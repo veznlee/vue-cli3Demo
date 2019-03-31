@@ -4,27 +4,35 @@
       <div class="search-line clearfix">
         <div class="search-inline-item">
           <span class="item-label">操作人</span>
-          <Input v-model="searchform.username" class="commom-input" placeholder="姓名"/>
+          <Input v-model="searchform.username" class="commom-input" size="large" :maxlength="20" placeholder="姓名"/>
         </div>
         <div class="search-inline-item">
           <span class="item-label">操作类型</span>
-          <Input v-model="searchform.operation" class="commom-input" placeholder="新增/修改等操作类型"/>
+          <Input v-model="searchform.operation" class="commom-input" size="large" placeholder="新增/修改等操作类型"/>
         </div>
         <div class="search-inline-item">
           <span class="item-label">开始时间</span>
-          <DatePicker type="datetime" placement="bottom-end" v-model="searchform.beginTime" placeholder="选择日期" :clearable="true" class="commom-input"></DatePicker>
+          <DatePicker type="datetime" placement="bottom-end" size="large" v-model="searchform.beginTime" placeholder="选择日期" :clearable="true" class="commom-input"></DatePicker>
         </div>
         <div class="search-inline-item">
           <span class="item-label">结束时间</span>
-          <DatePicker type="datetime" placement="bottom-end" v-model="searchform.endTime" placeholder="选择日期" :clearable="true" class="commom-input"></DatePicker>
+          <DatePicker type="datetime" placement="bottom-end" size="large" v-model="searchform.endTime" placeholder="选择日期" :clearable="true" class="commom-input"></DatePicker>
         </div>
-        <Button type="primary" class="search-btn" @click="search">搜索</Button>
+        <Button type="primary" class="search-btn" size="large" @click="search">搜索</Button>
       </div>
       <div class="table-container bold-table-header">
         <Table stripe :columns="tableColumns" :data="dataList" ref="table"></Table>
       </div>
       <div class="pagination-container" v-show="dataTotal > page.pageSize">
-        <Page :total="dataTotal" show-total :current="page.page" :page-size="page.pageSize" @on-change="pageChange"/>
+        <Page 
+        show-total  
+        show-elevator 
+        show-sizer
+        :total="dataTotal" 
+        :current="page.page" 
+        :page-size="page.pageSize" 
+        @on-change="pageChange"
+        @on-page-size-change="pageSizeChange"/>
       </div>
     </div>
   </div>
@@ -32,9 +40,10 @@
 
 <script>
 import {dateFormat} from '@/filter/common'
+import curdMixin from '@/mixins/curd.js'
 import urls from "@/config/lzarchives.url.js"
 export default {
-  name:'operatelog',
+  mixins:[curdMixin],
   data(){
     return {
       urls:urls.operatelog,
@@ -71,17 +80,8 @@ export default {
           key: 'ip',
           align: 'center'
         }
-      ],
-      dataList: [],
-      dataTotal:0,
-      page:{
-        page:1,
-        pageSize:10
-      }
+      ]
     }
-  },
-  created(){
-    this.getList();
   },
   methods:{
     getList(){
@@ -97,7 +97,7 @@ export default {
       if(searchData.endTime != ''){
         searchData.endTime = dateFormat(searchData.endTime);
       }
-      console.log(searchData);
+      // console.log(searchData);
       this.$thttp({
         url:this.urls.list,
         data:searchData,
@@ -110,14 +110,6 @@ export default {
           this.$Message.warning(data.msg);
         }
       })
-    },
-    search(){
-      this.page.page = 1;
-      this.getList();
-    },
-    pageChange(index){
-      this.page.page = index;
-      this.getList();
     }
   }
 }

@@ -13,9 +13,9 @@
               <div class="search-line clearfix">
                 <div class="search-inline-item">
                   <span class="item-label">关键字</span>
-                  <Input v-model="searchform.searchKey" class="commom-input" placeholder="部门名称"/>
+                  <Input v-model="searchform.searchKey" class="commom-input" size="large" placeholder="部门名称"/>
                 </div>
-                <Button type="primary" class="search-btn" @click="search">搜索</Button>
+                <Button type="primary" class="search-btn" size="large" @click="search">搜索</Button>
               </div>
               <div class="operate-line">
                 <Button type="success" size="large" @click="add">新增</Button>
@@ -27,7 +27,15 @@
                 <Table highlight-row stripe :columns="columns" :data="dataList" ref="tableWrap" @on-current-change="tableRowChange"></Table>
               </div>
               <div class="pagination-container" v-show="dataTotal > page.pageSize">
-                <Page :total="dataTotal" show-total :current="page.page" :page-size="page.pageSize" @on-change="pageChange"/>
+                <Page 
+                  show-total  
+                  show-elevator 
+                  show-sizer
+                  :total="dataTotal" 
+                  :current="page.page" 
+                  :page-size="page.pageSize" 
+                  @on-change="pageChange"
+                  @on-page-size-change="pageSizeChange"/>
               </div>
             </div>
           </div>

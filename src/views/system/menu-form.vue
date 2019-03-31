@@ -50,8 +50,8 @@
     },
     data () {
       const trim = (str) => {
-        if(str === null) str = '';
-  　　   return str.replace(/(^\s*)|(\s*$)/g, "");
+        str = str+'';
+        return str.replace(/(^\s*)|(\s*$)/g, "");
   　　};
       const iconValid = (rule, value, callback) => {
         value = trim(value);

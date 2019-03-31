@@ -26,12 +26,28 @@ export default {
     }
   },
   methods:{
+    resetTree(arr){
+      function changeTree(treeArr){
+        for(let i = 0;i<treeArr.length;i++){
+          let item = treeArr[i];
+          if(item.children && item.children.length){
+            if(item.checked){
+              // item.selected = true;
+              delete item.checked;
+            }
+            changeTree(item.children);
+          }
+        }
+      };
+      changeTree(arr);
+    },
     getTree(){
       this.$thttp({
         method:'get',
         url:this.url+this.actionId
       }).then(data=>{
         if(data.code*1 == 0){
+          this.resetTree(data.data);
           this.treeData = data.data;
         };
       })

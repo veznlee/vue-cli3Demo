@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <!-- <div class="home">
     <div class="home-top"></div>
     <div class="home-nav-container">
       <div class="home-nav-card" v-for="modalItem in menu" :key="modalItem.id">
@@ -14,13 +14,48 @@
               </a>
             </li>
           </ul>
-         </div>
-       </div>
+        </div>
+      </div>
+    </div>
+  </div> -->
+
+  <div class="fh-full-scroll module-top-nav-container f-pr">
+    <div class="module-top-nav">
+      <div class="nav-inner clearfix">
+        <div class="nav-head">
+          <!-- <router-link class="icon-box" :to="{name:'home'}">
+            <i class="app-icon app-icon-index"></i>
+          </router-link> -->
+          <span class="text">系统设置</span>
+        </div>
+        <div class="nav-body">
+          <div class="module-nav-list">
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="home-nav-container">
+      <div class="home-nav-card" v-for="modalItem in menu" :key="modalItem.id">
+        <div class="card-title">
+          <i class="home-nav-icon" :class="modalItem.mata.icon"></i><span>{{modalItem.mata.title}}</span>
+        </div>
+        <div class="card-body">
+          <ul class="home-nav-list clearfix">
+            <li class="nav-item" v-for="item in modalItem.children" :key="item.id">
+              <a href="javascript:;" :class="item.mata.icon" @click="toChild(item)">
+                <span>{{item.mata.title}}</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import '@/assets/app.scss'
 import { mapGetters } from 'vuex'
 export default {
   data(){
@@ -30,7 +65,6 @@ export default {
   },
   created(){
     this.getMenu();
-    console.log(this.menu);
   },
   methods:{
     ...mapGetters([

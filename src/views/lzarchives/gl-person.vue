@@ -4,39 +4,88 @@
       <div class="search-line clearfix">
         <div class="search-inline-item">
           <span class="item-label">关键字</span>
-          <Input v-model="searchform.searchKey" class="commom-input" placeholder="姓名、编号"/>
+          <Input v-model="searchform.searchKey" class="commom-input" :maxlength="20" placeholder="姓名、编号" size="large"/>
         </div>
         <div class="search-inline-item">
           <span class="item-label">职务</span>
-          <Select v-model="searchform.workPost" class="commom-input">
+          <Input v-model="searchform.workPost" class="commom-input" :maxlength="20" placeholder="职务名称" size="large"/>
+          <!-- <Select v-model="searchform.workPost" class="commom-input" size="large">
             <Option v-for="item in jobList" :value="item.dictValue" :key="item.dictValue">{{ item.dictName }}</Option>
-          </Select>
+          </Select> -->
         </div>
         <div class="search-inline-item">
           <span class="item-label">单位</span>
-          <Select v-model="searchform.workUnit" class="commom-input">
+          <Input v-model="searchform.workUnit" size="large" class="commom-input" :maxlength="20" placeholder="单位名称"/>
+          <!-- <Select v-model="searchform.workUnit" class="commom-input" size="large">
             <Option v-for="item in unitList" :value="item.dictValue" :key="item.dictValue">{{ item.dictName }}</Option>
+          </Select> -->
+        </div>
+        <div class="search-inline-item">
+          <span class="item-label">状态</span>
+          <Select v-model="searchform.cstatus" class="commom-input" size="large">
+            <option value="">请选择</option>
+            <Option v-for="item in jobStateList" :value="item.dictValue" :key="item.dictValue">{{ item.dictName }}</Option>
           </Select>
         </div>
         <div class="search-inline-item">
           <span class="item-label">参工时间</span>
-          <DatePicker type="date" placement="bottom-end" v-model="searchform.workDate" placeholder="选择日期" :clearable="true" class="commom-input"></DatePicker>
+          <DatePicker type="date" size="large" 
+          placement="bottom-end" 
+          v-model="searchform.workDate" 
+          placeholder="选择日期" 
+          :clearable="true" 
+          class="commom-input"
+          style="width:180px;"></DatePicker>
         </div>
-        <Button type="primary" class="search-btn" @click="search">搜索</Button>
+        <Button type="primary" class="search-btn" size="large" @click="search">搜索</Button>
       </div>
       <div class="operate-line">
         <Button type="success" size="large" @click="addNew">新增</Button>
-        <Button type="warning" size="large" :disabled="btnDisabled" @click="updateDetail">修改</Button>
+        <Button type="error" size="large" :disabled="btnDisabled" @click="updateDetail">修改</Button>
+        <Button type="warning" size="large" :disabled="btnDisabled" @click="transfer">变更</Button>
         <Button type="info" size="large" :disabled="btnDisabled" @click="viewDetail">查看</Button>
-        <Button type="error" size="large" :disabled="btnDisabled" @click="del">删除</Button>
+        <!-- <Button type="error" size="large" :disabled="btnDisabled" @click="del">删除</Button> -->
       </div>
       <div class="table-container bold-table-header">
         <Table highlight-row stripe :columns="tableColumns" :data="dataList" ref="tableWrap" @on-current-change="tableRowChange"></Table>
       </div>
       <div class="pagination-container" v-show="dataTotal > page.pageSize">
-        <Page :total="dataTotal" show-total :current="page.page" :page-size="page.pageSize" @on-change="pageChange"/>
+        <Page 
+        show-total  
+        show-elevator 
+        show-sizer
+        :total="dataTotal" 
+        :current="page.page" 
+        :page-size="page.pageSize" 
+        @on-change="pageChange"
+        @on-page-size-change="pageSizeChange"/>
       </div>
     </div>
+
+    <Modal
+      v-model="transferModal"
+      :width="400"
+      title="变更档案管理人员状态"
+      :closable="false"
+      :mask-closable="false"
+      >
+      <div class="">
+        <ul class="select-liest-wrap" v-if="jobStateList.length">
+          <li class="select-list-item" 
+          v-for="item in jobStateList" 
+          :key="item.dictValue" 
+          :class="{active:currentJobState == item.dictValue}" 
+          @click="changeJobState(item)">{{item.dictName}}</li>
+        </ul>
+        <ul class="select-liest-wrap" v-if="!jobStateList.length">
+          <li class="select-list-item">在职状态列表获取失败，无法变更</li>
+        </ul>
+      </div>
+      <div slot="footer" style="text-align:left;">
+        <Button type="primary" size="large" @click="confirmTransfer">确定</Button>
+        <Button type="error" size="large" @click="cancelTransfer">取消</Button>
+      </div>
+    </Modal>
   </div>
 </template>
 
@@ -55,7 +104,8 @@ export default {
         searchKey:'',
         workPost:'',
         workUnit:'',
-        workDate:''
+        workDate:'',
+        cstatus:''
       },
       jobList: [
         {
@@ -178,13 +228,18 @@ export default {
       page:{
         page:1,
         pageSize:10
-      }
+      },
+      // 弹窗状态变更列表
+      transferModal:false,
+      currentJobState:'',
+      jobStateList:[]
     }
   },
   created(){
     let types = this.$urlConfig.dataListType;
-    this.getDictList(types.workPost,'jobList');
-    this.getDictList(types.workUnit,'unitList');
+    // this.getDictList(types.workPost,'jobList');
+    // this.getDictList(types.workUnit,'unitList');
+    this.getDictList(types.personJobState,'jobStateList',true);
   },
   methods:{
     getList(){
@@ -207,16 +262,18 @@ export default {
         }
       })
     },
-    getDictList(type,listName){
+    getDictList(type,listName,addFirst){
       this.$thttp({
         url:this.$urlConfig.dataList+type,
         method:'get'
       }).then(data=>{
         if(Array.isArray(data) && data.length>0){
-          data.unshift({
-            dictValue: '',
-            dictName: '请选择'
-          });
+          if(!addFirst){
+            data.unshift({
+              dictValue: '',
+              dictName: '请选择'
+            });
+          };
           this[listName] = data;
         }
       })
@@ -234,9 +291,6 @@ export default {
         params:{id:0,view:0}
       })
     },
-    transfer(){
-      console.log('调任')
-    },
     viewDetail(){
       this.$router.push({
         name:'gl-person-detail',
@@ -248,6 +302,39 @@ export default {
         name:'gl-person-detail',
         params:{id:this.currentRow.id,view:0}
       })
+    },
+
+    // 改变状态
+    changeJobState(item){
+      this.currentJobState = item.dictValue;
+    },
+    transfer(){
+      this.currentJobState = this.currentRow.cstatus;
+      this.transferModal = true;
+    },
+    confirmTransfer(){
+      this.transferModal = false;
+      // 如果跟之前的一样，不请求
+      if(this.currentJobState == this.currentRow.cstatus){
+        return false;
+      } 
+      this.$thttp({
+        url:this.urls.changeJobState+this.currentRow.id,
+        method:'put',
+        data:{
+          cstatus:this.currentJobState
+        }
+      }).then(data=>{
+        if(data.code*1 == 0){
+          this.$Message.success('保存成功');
+          this.getList();
+        }else{
+          this.$Message.warning(data.msg);
+        }
+      })
+    },
+    cancelTransfer(){
+      this.transferModal = false;
     }
   }
 }

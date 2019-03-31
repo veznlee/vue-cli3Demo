@@ -24,7 +24,8 @@ export const urlConfig = {
     educationalBg:9,//学历
     university:10,
     maritalStatus:12,//婚姻状况
-    politicalAspect:14//政治面貌
+    politicalAspect:14,//政治面貌,
+    personJobState:15
   },
   // 文件上传
   fileUpload:'problem/uploadProfiles'
