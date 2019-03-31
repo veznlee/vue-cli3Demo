@@ -15,6 +15,7 @@ import storage from '@/libs/local.js'
  */
 import iView from 'iview';
 import 'iview/dist/styles/iview.css';   
+import './theme/main.less';
 Vue.use(iView);
 
 Vue.config.productionTip = false

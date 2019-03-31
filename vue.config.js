@@ -16,6 +16,16 @@ module.exports = {
     outputDir: 'dist', // 输出文件夹，默认dist
     productionSourceMap: true, // 该配置项用于设置是否为生产环境构建生成 source map
 
+    // 使用iview自定义主题时，引入less报错的问题
+    css: {
+        loaderOptions: { // 向 CSS 相关的 loader 传递选项
+            less: {
+                javascriptEnabled: true
+            }
+        }
+    },
+    
+
     // config 参数为已经解析好的 webpack 配置
     chainWebpack: config => {
         config.module
