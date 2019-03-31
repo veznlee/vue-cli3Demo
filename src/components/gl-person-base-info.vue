@@ -5,14 +5,18 @@
         <div class="title" style="width:420px;">
           <div class="f-flex-item" style>
             <div class="fix-item">个人基本信息</div>
-            <div class="auto-item" style="padding-left:20px;" v-if="canEdit">
+            <div class="auto-item" style="padding-left:20px;" v-if="canEdit && btnDisabled">
               <!-- filterable
                 remote
                 :remote-method="getUserList"
                 :loading="searchLoading" -->
               <Select v-model="selectedUserId"
                 @on-change="changeSelUser"
-                placeholder="请输入姓名查询相关用户">
+                filterable
+                remote
+                :remote-method="getUserList"
+                :loading="searchLoading"
+                placeholder="请选择相关用户">
                 <Option v-for="(option, index) in userList" :value="option.username" :key="index">{{option.realName}}</Option>
               </Select>
             </div>
@@ -375,7 +379,7 @@
       save(){
         let obj = Object.assign({},this.personInfoObj);
         if(!obj.loginAccount){
-          this.$Message.waraing('请先选择添加信息的用户');
+          this.$Message.warning('请先选择添加信息的用户');
         };
         if(obj.birthday){
           obj.birthday = dateFormat(obj.birthday);
