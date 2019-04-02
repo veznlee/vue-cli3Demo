@@ -53,6 +53,7 @@ export default {
     ,saveMajorIssue:'bs/majorIssue/multi'
     ,majorIssueList:'bs/majorIssues'
     ,majorIssueDetail:'bs/majorIssue/'
+    ,downloadExcelModal:'file-templates/廉政档案模板.zip'
   },
   importTy:{
     reward:1,

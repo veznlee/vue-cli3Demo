@@ -12,11 +12,19 @@
         </div>
         <div class="search-inline-item">
           <span class="item-label">开始时间</span>
-          <DatePicker type="datetime" placement="bottom-end" size="large" v-model="searchform.beginTime" placeholder="选择日期" :clearable="true" class="commom-input"></DatePicker>
+          <DatePicker type="datetime" placement="bottom-end" size="large" v-model="searchform.beginTime" 
+          placeholder="选择日期" 
+          :options="maxTodayOption"
+          :clearable="true" 
+          class="commom-input"></DatePicker>
         </div>
         <div class="search-inline-item">
           <span class="item-label">结束时间</span>
-          <DatePicker type="datetime" placement="bottom-end" size="large" v-model="searchform.endTime" placeholder="选择日期" :clearable="true" class="commom-input"></DatePicker>
+          <DatePicker type="datetime" placement="bottom-end" size="large" v-model="searchform.endTime" 
+          placeholder="选择日期" 
+          :options="maxTodayOption"
+          :clearable="true" 
+          class="commom-input"></DatePicker>
         </div>
         <Button type="primary" class="search-btn" size="large" @click="search">搜索</Button>
       </div>
@@ -53,6 +61,11 @@ export default {
         beginTime:'',
         endTime:''
       },
+      maxTodayOption:{
+        disabledDate (date) {
+          return date && date.valueOf() >= (new Date()).getTime();
+        }
+      },
       tableColumns: [
         {
           title: '编号',
@@ -67,7 +80,12 @@ export default {
         },
         {
           title: '操作类型',
-          key: 'operation',
+          key: 'operationText',
+          align: 'center'
+        },
+        {
+          title: '模块名称',
+          key: 'moduelText',
           align: 'center'
         },
         {
@@ -92,10 +110,10 @@ export default {
         return;
       }
       if(searchData.beginTime != ''){
-        searchData.beginTime = dateFormat(searchData.beginTime);
+        searchData.beginTime = dateFormat(searchData.beginTime,'yyyy-MM-dd hh:mm:ss');
       }
       if(searchData.endTime != ''){
-        searchData.endTime = dateFormat(searchData.endTime);
+        searchData.endTime = dateFormat(searchData.endTime,'yyyy-MM-dd hh:mm:ss');
       }
       // console.log(searchData);
       this.$thttp({

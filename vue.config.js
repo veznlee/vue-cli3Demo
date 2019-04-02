@@ -13,6 +13,8 @@ const cfg = process.env.NODE_ENV === 'production' ? configs.build.env : configs.
 
 module.exports = {
     //baseUrl: 'vue',// 改变 webpack 配置文件中 output 的 publicPath 项
+
+    // publicPath: process.env.NODE_ENV === 'production' ? '/code/' : '/',
     outputDir: 'dist', // 输出文件夹，默认dist
     productionSourceMap: true, // 该配置项用于设置是否为生产环境构建生成 source map
 

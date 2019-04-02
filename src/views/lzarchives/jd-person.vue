@@ -32,7 +32,7 @@
           <DatePicker type="date" size="large" 
           placement="bottom-end" 
           v-model="searchform.workDate" 
-          placeholder="选择日期" 
+          placeholder="选择日期"
           :clearable="true" 
           class="commom-input"
           style="width:180px;"></DatePicker>
@@ -99,6 +99,11 @@ export default {
   mixins:[curdMixin],
   data(){
     return {
+      maxTodayOption:{
+        disabledDate (date) {
+          return date && date.valueOf() >= (new Date()).getTime();
+        }
+      },
       openEdit:false,
       urls:urls.jdperson,
       searchform:{
@@ -118,9 +123,10 @@ export default {
       }],
       columns: [
         {
-          type:'index',
+          title:'档案编号',
+          key:'serialNumber',
           align: 'center',
-          width: 80
+          width: 118
         },
         {
           title: '姓名',

@@ -1,16 +1,35 @@
-export const urlConfig = {
-  // 网站根目录
-  baseUrl:'http://192.168.0.106:8081/',
-  // 网站首页
-  webIndex:'http://spzl.xwnykzs.com/#/',
-  // 请求路径
-  serverUrl:'http://192.168.0.106:8081/',
-  // 图片根路径
-  imgUrl:'http://192.168.0.106:8081/',
-  // 用户
-  menu: 'sys/menus/tree/nav',
+const __config = {
+  production:{
+    // 网站根目录
+    baseUrl:'http://116.62.243.51:8082/',
+    // 网站首页
+    webIndex:'http://116.62.243.51:8082/',
+    // 请求路径
+    serverUrl:'http://116.62.243.51:8082/',
+    // 图片根路径
+    imgUrl:'http://116.62.243.51:8082/'
+  },
+  dev:{
+    // 网站根目录
+    baseUrl:'http://192.168.0.106:8081/',
+    // 网站首页
+    webIndex:'http://192.168.0.106:8081/',
+    // 请求路径
+    serverUrl:'http://192.168.0.106:8081/',
+    // 图片根路径
+    imgUrl:'http://192.168.0.106:8081/'
+  }
+}
+
+let __mode = process.env.NODE_ENV === 'production' ? __config.production : __config.dev;
+
+export const urlConfig = Object.assign(__mode,{
+  // 文件下载
+  fileDownload:'bs/downloadFile',
   // 登录
   login:'sys/user/ajaxLogin',
+  // 登出
+  loginOut:'sys/user/loginOut',
   // 数据字典
   dataList:'sys/dictDatas/',
   dataListType:{
@@ -29,7 +48,7 @@ export const urlConfig = {
   },
   // 文件上传
   fileUpload:'problem/uploadProfiles'
-}
+})
 
 
 export const appConfig = {

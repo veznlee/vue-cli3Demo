@@ -323,7 +323,7 @@
   }
 } 
 
-
+/*左侧树菜单页面*/
 .module-tree-page{
   position:relative;
   .tree-page-inner{
@@ -379,4 +379,11 @@
       background: #e8eaec;
     }
   }
+}
+
+/*下载链接*/
+.inline-down-link{
+  display: inline-block;
+  font-size: 14px;
+  margin: 0 10px;
 }

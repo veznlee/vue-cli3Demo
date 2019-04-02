@@ -7,8 +7,13 @@
       <Input type="text" v-model="formCustom.fullName" size="large"/>
     </FormItem>
     <FormItem label="出生日期" prop="birthday">
-      <DatePicker type="date" size="large" placement="bottom-end" v-model="formCustom.birthday" placeholder="" :clearable="true"
-       style="width:100%;" @on-change="selectBirthday"></DatePicker>
+      <DatePicker type="date" size="large" 
+      placement="bottom-end" 
+      v-model="formCustom.birthday"
+      :clearable="true"
+      :options="maxTodayOption"
+      style="width:100%;" 
+      @on-change="selectBirthday"></DatePicker>
     </FormItem>
     <FormItem label="政治面貌" prop="politicalBg">
       <Select v-model="formCustom.politicalBg" class="commom-input">
@@ -67,7 +72,12 @@
         politicalList:[{
           dictValue:'',
           dictName:'请选择'
-        }]
+        }],
+        maxTodayOption:{
+          disabledDate (date) {
+            return date && date.valueOf() >= (new Date()).getTime();
+          }
+        }
       }
     },
     computed:{

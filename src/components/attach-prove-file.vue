@@ -15,7 +15,7 @@
           <label class="ivu-form-item-label" style="width: 50px;">文件</label>
           <div class="ivu-form-item-content" style="margin-left: 50px;">
             <div class="ivu-input-wrapper ivu-input-wrapper-large ivu-input-type">
-              <div class="ivu-upload">
+              <div>
                 <div class="clearfix form-inline-upload">
                   <div class="forge-upload-btn">
                     <input type="file" multiple="multiple" @change="changeFile($event)">
@@ -157,6 +157,9 @@ export default {
         this.selectFile[0] = files[0];
         this.uploadFile();
       }
+      setTimeout(()=>{
+        el.target.value="";
+      },0)
     },
     uploadFile(){
       let file = this.selectFile[0];

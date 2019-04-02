@@ -7,6 +7,7 @@ export default {
     // 角色查看添加
     roleDetail:'sys/userRoles/select/',
     roleSave:'sys/userRole',
+    updatePassword:'sys/user/modifyPwd'
   },
   role:{
     add:'sys/role',

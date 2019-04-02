@@ -5,11 +5,7 @@
         <div class="title" style="width:420px;">
           <div class="f-flex-item" style>
             <div class="fix-item">个人基本信息</div>
-            <div class="auto-item" style="padding-left:20px;" v-if="canEdit && btnDisabled">
-              <!-- filterable
-                remote
-                :remote-method="getUserList"
-                :loading="searchLoading" -->
+            <div class="auto-item" style="padding-left:20px;" v-if="canEdit">
               <Select v-model="selectedUserId"
                 @on-change="changeSelUser"
                 filterable
@@ -59,7 +55,10 @@
               <td>
                 <div v-if="isView">{{personInfoObj.birthday}}</div>
                 <div v-if="!isView">
-                  <DatePicker type="date" placement="bottom-end" v-model="personInfoObj.birthday" placeholder="选择日期" :clearable="true"></DatePicker>
+                  <DatePicker type="date" placement="bottom-end" v-model="personInfoObj.birthday"
+                  placeholder="选择日期" 
+                  :clearable="true"
+                  :options="maxTodayOption"></DatePicker>
                 </div>
               </td>
               <td rowspan="3"></td>
@@ -124,14 +123,20 @@
               <td>
                 <div v-if="isView">{{personInfoObj.joinPartyDate}}</div>
                 <div v-if="!isView">
-                  <DatePicker type="date" placement="bottom-end" v-model="personInfoObj.joinPartyDate" placeholder="选择日期" :clearable="true"></DatePicker>
+                  <DatePicker type="date" placement="bottom-end" v-model="personInfoObj.joinPartyDate"
+                  placeholder="选择日期" 
+                  :clearable="true"
+                  :options="maxTodayOption"></DatePicker>
                 </div>
               </td>
               <td class="bg-gray">参加工作时间</td>
               <td colspan="2">
                 <div v-if="isView">{{personInfoObj.workDate}}</div>
                 <div v-if="!isView">
-                  <DatePicker type="date" placement="bottom-end" v-model="personInfoObj.workDate" placeholder="选择日期" :clearable="true"></DatePicker>
+                  <DatePicker type="date" placement="bottom-end" v-model="personInfoObj.workDate" 
+                  placeholder="选择日期" 
+                  :clearable="true"
+                  :options="maxTodayOption"></DatePicker>
                 </div>
               </td>
             </tr>
@@ -171,7 +176,10 @@
               <td>
                 <div v-if="isView">{{personInfoObj.currJobDate}}</div>
                 <div v-if="!isView">
-                  <DatePicker type="date" placement="bottom-end" v-model="personInfoObj.currJobDate" placeholder="选择日期" :clearable="true"></DatePicker>
+                  <DatePicker type="date" placement="bottom-end" v-model="personInfoObj.currJobDate" 
+                  placeholder="选择日期" 
+                  :clearable="true"
+                  :options="maxTodayOption"></DatePicker>
                 </div>
               </td>
               <td class="bg-gray">级别</td>
@@ -278,6 +286,11 @@
           zipCode: ''
         },
         searchLoading:false,
+        maxTodayOption:{
+          disabledDate (date) {
+            return date && date.valueOf() >= (new Date()).getTime();
+          }
+        },
         userList:[],
         sexList: [{
           dictValue: '',
@@ -347,6 +360,10 @@
             this.userList = data.data;
           }
         })
+        // 防止请求出错时一直为true
+        setTimeout(()=>{
+          this.searchLoading = false;
+        },3000);
       },
       getDictList(type,listName){
         this.$thttp({
@@ -380,6 +397,7 @@
         let obj = Object.assign({},this.personInfoObj);
         if(!obj.loginAccount){
           this.$Message.warning('请先选择添加信息的用户');
+          return;
         };
         if(obj.birthday){
           obj.birthday = dateFormat(obj.birthday);
@@ -407,7 +425,7 @@
             this.personInfoObj.id = data.data.id;
             this.$emit('changeEntity',data.data);
           }else{
-            this.$Message.waraing(data.msg);
+            this.$Message.warning(data.msg);
           }
         })
       }

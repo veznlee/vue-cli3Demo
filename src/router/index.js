@@ -9,8 +9,8 @@ import {findRouterByName} from "@/libs/appUtil"
 Vue.use(Router)
 const router = new Router({
   routes,
-  base: process.env.BASE_URL,
-  mode: 'history'
+  // mode: 'history',
+  base: process.env.BASE_URL
 })
 const {HOME_PAGE_NAME,LOGIN_PAGE_NAME,NOFOUND_PAGE_NAME} = {...appConfig};
 

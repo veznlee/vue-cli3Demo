@@ -12,8 +12,6 @@ import router from '@/router/index'
  * 携带当前页面路由，以期在登录页面完成登录后返回当前页面
  */
 const toLogin = () => {
-    alert('登录过期');
-    return;
     router.replace({
         path: '/login',
         query: {
@@ -60,7 +58,7 @@ tokenInstance.interceptors.response.use(function (response) {
     }
 }, function (error) {
     Message.error('您的网络好像出现了问题');
-    //return Promise.reject(error);
+    return Promise.reject(error);
 });
 
 
@@ -105,7 +103,7 @@ let downloadFile = function(filePath){
     const token = local.getLocal('accessToken') || '';
     axios({
         method: 'post',
-        url: 'http://192.168.0.106:8081/bs/downloadFile',
+        url: urlConfig.serverUrl+urlConfig.fileDownload,
         params: {filePath,token},
         headers:{'Content-Type': 'application/x-www-form-urlencoded'},
         responseType:'blob'
@@ -116,7 +114,15 @@ let downloadFile = function(filePath){
             var reader = new FileReader();
             reader.readAsDataURL(response.data);
             reader.onload = function (e) {
-                let fileName = filePath.split("\\").pop();
+                let fileName;
+                console.log(filePath+"");
+                if(filePath.indexOf("\\") > -1){
+                    fileName = filePath.split("\\").pop();
+                }else if(filePath.indexOf("/") > -1){
+                    fileName = filePath.split("/").pop();
+                }else{
+                    fileName = filePath;
+                }
                 // 转换完成，创建一个a标签用于下载
                 var a = document.createElement('a');
                 a.download = fileName;

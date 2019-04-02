@@ -1,10 +1,10 @@
 <template>
-  <Form ref="loginForm" :model="form" :rules="rules" @keydown.enter.native="handleSubmit">
+  <Form ref="loginForm" :model="form" :rules="formRules" @keydown.enter.native="handleSubmit">
     <FormItem prop="account">
-      <Input class="login-input" size="large" v-model="form.account" placeholder="请输入账号"></Input>
+      <Input class="login-input" size="large" v-model="form.account" placeholder="请输入账号,2-10位" autocomplete="off"/>
     </FormItem>
     <FormItem prop="password">
-      <Input class="login-input" size="large" type="password" v-model="form.password" placeholder="请输入密码"></Input>
+      <Input class="login-input" size="large" type="password" v-model="form.password" placeholder="请输入密码,6-16位" autocomplete="off"/>
     </FormItem>
     <Row class="attach-line">
       <Col span="12" style="text-align:left;"><Checkbox v-model="form.rememberme">记住账号</Checkbox></Col>
@@ -19,14 +19,6 @@
 export default {
   name: 'LoginForm',
   props: {
-    accountRules: {
-      type: Array,
-      default: () => {
-        return [
-          { required: true, message: '账号不能为空', trigger: 'blur' }
-        ]
-      }
-    },
     passwordRules: {
       type: Array,
       default: () => {
@@ -41,19 +33,39 @@ export default {
     }
   },
   data () {
+    const requiredRule = { required: true, message: '必填项不能为空', trigger: 'blur' };
+    const accountValid = (rule, value, callback) => {
+      if (!/^[a-zA-Z][a-zA-Z0-9_\-]{1,9}$/.test(value)) {
+        callback(new Error('账号格式错误'));
+      } else {
+        callback();
+      }
+    };
+    const passwordValid = (rule, value, callback) => {
+      if (!/^[a-zA-Z0-9_.\?\-]{6,16}$/.test(value)) {
+        callback(new Error('密码格式错误'));
+      } else {
+        callback();
+      }
+    };
+      
     return {
       form: {
         account: '',
         password: '',
         rememberme:false
+      },
+      formRules:{
+        account:[requiredRule,accountValid],
+        password:[requiredRule,passwordValid]
       }
     }
   },
   created(){
     var loginUser = this.$storage.getLocalObj('_login_user');
     if(loginUser){
-      this.form.account = loginUser.u;
-      this.form.password = loginUser.p;
+      this.form.account = loginUser.username;
+      this.form.password = loginUser.password;
       this.form.rememberme = true;
     }
   },
@@ -69,6 +81,7 @@ export default {
     handleSubmit () {
       this.$refs.loginForm.validate((valid) => {
         if (valid) {
+          console.log(this.form);
           this.$emit('on-success-valid', {
             account: this.form.account,
             password: this.form.password,

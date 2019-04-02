@@ -105,6 +105,9 @@
             };
           });
         }
+        setTimeout(()=>{
+          el.target.value="";
+        },0)
       },
       uploadFile(file,model){
         if(file.size == 0){

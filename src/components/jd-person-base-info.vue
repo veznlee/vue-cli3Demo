@@ -2,7 +2,9 @@
   <div class="detail-tab-container">
     <div class="module-table-card">
       <div class="card-header clearfix">
-        <div class="title">个人基本信息</div>
+        <div class="title">个人基本信息
+          <a class="inline-down-link" href="javascript:;" @click="downloadExcelModal">点击下载模板</a>
+        </div>
         <div class="btn-box">
           <!-- <Button type="success" size="large">打印</Button> -->
           <div class="forge-upload-btn" style="margin-left:32px;" v-if="canEdit">
@@ -149,6 +151,8 @@
   import {dateFormat} from '@/filter/common'
   import urls from "@/config/lzarchives.url.js"
   import {urlConfig} from "@/config/index.js"
+import { setPriority } from 'os';
+import { setTimeout } from 'timers';
   const jdperson = urls.jdperson;
   export default {
     components:{
@@ -169,6 +173,7 @@
     data(){
       return {
         importFileUrls:urlConfig.serverUrl+urlConfig.fileUpload,
+        downLoadExcelModalUrl:urlConfig.serverUrl+jdperson.downloadExcelModal,
         personId:0,
         personInfoObj:{
           id: '',
@@ -356,6 +361,9 @@
       },
     },
     methods:{
+      downloadExcelModal(){
+        this.$downFile(jdperson.downloadExcelModal);
+      },
       importBaseInfo(el){
         let files = el.target.files;
         let urlparam = this.personId*1 == 0 ? '' : '/'+this.personId;
@@ -379,6 +387,9 @@
             };
           });
         }
+        setTimeout(()=>{
+          el.target.value="";
+        },0)
       },
       getDetail(){
         this.$thttp({

@@ -34,6 +34,8 @@ export default {
       loginTime: 0,
       loginDisabled: false
     }
+
+    
   },
   created(){
     // this.$downFile('file_attachment_prove\\20190320\\测试.zip')
@@ -64,12 +66,10 @@ export default {
           this.$storage.setLocalObj('_app_user',data.operator);
           this.$storage.setLocalObj('_app_permission',data.data);
           // 测试vuex
-          this.setToken(data.token);
+          // this.setToken(data.token);
+          console.log(loginData);
           if(obj.rememberme){
-            this.$storage.setLocalObj('_login_user',{
-              u:obj.account,
-              p:obj.password
-            })
+            this.$storage.setLocalObj('_login_user',loginData)
           }else{
             this.$storage.removeLocal('_login_user');
           }

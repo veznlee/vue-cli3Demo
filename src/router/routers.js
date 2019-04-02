@@ -218,8 +218,7 @@ export default [
         component: () => import('@/views/system/dictionary.vue'),
       },
     ]
-  },
-  {
+  },{
     path: '/judgeset',
     name: 'judgeset',
     meta:{
@@ -227,5 +226,8 @@ export default [
     },
     component: () => import('@/views/judgeset/index.vue'),
     children:[]
+  },{ 
+    path:'*',
+    redirect:'/error_404'
   }
 ]
